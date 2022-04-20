@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="../node_modules/three/build/three.js"></script>
+    <script src="../node_modules/stats/Stats.min.js"></script>
+    <script src="../node_modules/three-orbitcontrols-ts/dist/index.js"></script>
+    <style>
+        html, body {
+            padding: 0;
+            margin: 0;
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        #threeDemo {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        #myStats {
+            z-index: 100;
+            position: absolute;
+            top: 10px;
+            left: 10px;
+        }
+    </style>
+</head>
+<body>
+<div id="threeDemo"></div>
+<div id="myStats"></div>
+</body>
+</html>
+
+<script type="module">
+
+    import {OrbitControls} from "three-orbitcontrols-ts";
+
+    const {
+        Scene,
+        PerspectiveCamera,
+        WebGLRenderer,
+        BoxGeometry,
+        CircleGeometry,
+        SphereGeometry,
+        MeshBasicMaterial,
+        MeshLambertMaterial,
+        Mesh,
+        PlaneGeometry,
+        AmbientLight,
+        SpotLight,
+        Vector2,
+        AxesHelper
+    } = THREE;
+
+
+    let sence = new Scene();
+
+    let camera = new PerspectiveCamera(75, innerWidth / innerHeight, .1, 1000);
+
+    let renderer = new WebGLRenderer()
+    renderer.setSize(innerWidth, innerHeight);
+    renderer.shadowMap.enabled = true
+    document.getElementById('threeDemo').appendChild(renderer.domElement);
+
+
+    let geometry = new SphereGeometry(5, 30, 30)
+    // geometry.scale(5, 5, 5);
+    geometry.translate(10, 10, 10);
+    let metrial = new MeshLambertMaterial({
+        color: 0xff2288
+    });
+    let cube = new Mesh(geometry, metrial);
+    sence.add(cube)
+    cube.castShadow = true;
+    // cube.position.x = 10;
+    // cube.position.y = 10;
+    // cube.position.z = 10;
+
+    // cube.rotation.x += .5;
+    // cube.rotation.y += .5;
+
+    let geometry2 = new BoxGeometry(3, 3, 3)
+    let metrial2 = new MeshBasicMaterial({
+        color: 0x11ff00
+    })
+    let cube2 = new Mesh(geometry2, metrial2)
+    cube2.castShadow = true;
+    cube2.position.set(-20, 20, -20);
+    sence.add(cube2)
+
+
+    let axes = new AxesHelper(50)
+    sence.add(axes)
+
+
+    let planeGeometry = new PlaneGeometry(100, 100)
+    let planeMetrial = new MeshLambertMaterial({
+        color: 0xcccccc
+    })
+    let plane = new Mesh(planeGeometry, planeMetrial);
+    plane.rotation.x = -.5 * Math.PI;
+    plane.position.set(15, 0, 0)
+    plane.receiveShadow = true;
+    sence.add(plane);
+
+    camera.position.x = -50;
+    camera.position.y = 70;
+    camera.position.z = 55;
+    // camera.lookAt(sence.position)
+    camera.lookAt(0, 0, 0)
+
+    // 聚光灯
+    let spotLight = new SpotLight(0xffffff)
+    spotLight.position.set(-60, 40, -15);
+    spotLight.castShadow = true;
+    spotLight.shadow.mapSize = new Vector2(1024, 1024)
+    spotLight.shadow.camera.far = 130;
+    spotLight.shadow.camera.near = 40;
+    sence.add(spotLight)
+
+    let ambienLight = new AmbientLight(0xAAAAAA)
+    sence.add(ambienLight)
+
+    // renderer.render(sence, camera);
+
+
+    let stats = addStats();
+    renderSence();
+
+    var gap = 0;
+
+    function renderSence() {
+
+        gap += .01
+
+        cube.rotation.x += 0.01;
+        cube.rotation.y += 0.01;
+        cube.rotation.z += 0.01;
+        //
+        cube.position.x = 10 + (10 * (Math.sin(gap)));
+        cube.position.y = 6 + (10 * (Math.abs(Math.cos(gap))))
+
+
+        cube2.rotation.x = 20 + 10 * Math.cos(gap)
+
+        // camera.position.x = -50 + (-50 * Math.sin(gap))
+        // camera.position.z = 50 + (50 * Math.cos(gap))
+
+        stats.update();
+        requestAnimationFrame(renderSence)
+
+        renderer.render(sence, camera)
+    }
+
+    function addStats() {
+        let stats = new Stats();
+        // stats.domElement.style.position = 'absolute';
+        // stats.domElement.style.top = '0';
+        // stats.domElement.style.left = '0';
+        stats.setMode(0)
+
+        document.getElementById('myStats').appendChild(stats.domElement)
+
+        return stats;
+    }
+
+    addEventListener('resize', onWindowResize, false);
+
+    function onWindowResize() {
+        camera.aspect = innerWidth / innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(innerWidth, innerHeight)
+    }
+
+    // let rayCaster = new THREE.Raycaster()
+    //
+    // let mouse = new Vector2()
+    //
+    // const onMouseMove = ({clientX, clientY}) => {
+    //     mouse.x = (clientX / innerWidth) * 2 - 1;
+    //     mouse.y = -(clientY / innerHeight) * 2 + 1;
+    //
+    //     camera.position.x += mouse.x
+    //     camera.position.z += mouse.y
+    //
+    // }
+    //
+    // self.addEventListener('mousemove', onMouseMove, false);
+
+    // const helper = new THREE.CameraHelper(camera)
+    // sence.add(helper)
+
+
+    let controller = new OrbitControls(
+        camera,
+        renderer.domElement
+    );
+
+</script>

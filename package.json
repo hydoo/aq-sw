@@ -1,0 +1,49 @@
+{
+  "name": "aq-sw",
+  "private": false,
+  "version": "0.1.1",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc --noEmit && vite build",
+    "pre": "vite preview"
+  },
+  "dependencies": {
+    "@antv/f2": "^4.0.13",
+    "@antv/f6": "^0.0.16",
+    "@antv/g2": "^4.1.49",
+    "@antv/g2plot": "^2.4.15",
+    "@antv/l7": "^2.8.22",
+    "@antv/l7plot": "^0.0.10",
+    "@antv/x6": "^1.31.3",
+    "@antv/xflow": "^1.0.41",
+    "axios": "^0.26.1",
+    "d3": "^7.4.4",
+    "echarts": "^5.3.2",
+    "gojs": "^2.2.6",
+    "less": "^4.1.2",
+    "less-loader": "^10.2.0",
+    "lodash": "^4.17.21",
+    "mockjs": "^1.1.0",
+    "naive-ui": "^2.27.0",
+    "pinia": "^2.0.13",
+    "stats": "^1.0.0",
+    "three": "^0.139.2",
+    "three-orbitcontrols-ts": "^0.1.2",
+    "vfonts": "^0.0.3",
+    "vue": "^3.2.25",
+    "vue-router": "^4.0.14"
+  },
+  "devDependencies": {
+    "@types/d3": "^7.1.0",
+    "@types/three": "^0.139.0",
+    "@vitejs/plugin-vue": "^2.3.0",
+    "typescript": "^4.5.4",
+    "vite": "^2.9.0",
+    "vue-tsc": "^0.29.8"
+  },
+  "description": "测试程序",
+  "main": "index.js",
+  "repository": "https://github.com/hydoo/aq-sw.git",
+  "author": "hydoo",
+  "license": "sw"
+}
